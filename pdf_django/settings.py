@@ -11,8 +11,6 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-from celery.schedules import crontab
-import pdf_django.tasks
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,6 +32,7 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 INSTALLED_APPS = [
     "mainapp",
+    'wkhtmltopdf',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -41,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'drf_yasg',
-    'silk'
+    'silk',
 ]
 
 MIDDLEWARE = [
@@ -135,9 +134,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
 
-CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
-        "task": "pdf_django.tasks.sample_task",
-        "schedule": crontab(minute="*/1"),
-    },
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'v.burlakov@thecoders.ru'
+EMAIL_HOST_PASSWORD = 'Syi6_t9/L;7wGgdA'
+
+WKHTMLTOPDF_CMD = '/usr/local/lib/python3.9/site-packages/wkhtmltopdf'
+
+WKHTMLTOPDF_CMD_OPTIONS = {
+    'quiet': True,
 }

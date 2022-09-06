@@ -1,10 +1,21 @@
-from celery import shared_task
+
 from celery.utils.log import get_task_logger
-
-
+from django.core.mail import EmailMessage
+from .celery import app
+from .settings import EMAIL_HOST_USER
 logger = get_task_logger(__name__)
 
 
-@shared_task
-def sample_task():
-    logger.info("The sample task just ran.")
+@app.task(name='sample_task')
+def sample_task(pdf_data):
+
+    logger.info("Отправляю pdf.")
+    mail = EmailMessage(
+        'subject',
+        'content',
+        EMAIL_HOST_USER,
+        ['sl.burlakov@vk.com'],
+        headers={'Reply-To':  'tihon4326@mail.ru'}
+    )
+
+    mail.send()

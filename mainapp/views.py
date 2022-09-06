@@ -1,36 +1,46 @@
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, CreateView
-from mainapp.forms import ProductForm
 from mainapp.models import Product
 from rest_framework import viewsets
 from rest_framework.response import Response
 from mainapp.serializers import ProductSerializer
-
-class ProductListView(ListView):
-    model = Product
-    template_name = 'index.html'
-    context_object_name = 'product_list'
-    queryset = Product.objects.all().order_by('name')
-
-
-class ProductCreateView(CreateView):
-    form_class = ProductForm
-    template_name = 'add_product.html'
+from pdf_django.tasks import sample_task
 
 
 class ProductViewSet(viewsets.ViewSet):
     """
-    A simple ViewSet for listing or retrieving users.
+    A simple ViewSet
     """
-    template_name = 'your_template.html'
+    serializer_class = ProductSerializer
+    queryset = Product.objects.all()
 
     def list(self, request):
         queryset = Product.objects.all()
-        serializer = ProductSerializer(queryset, many=True)
+        serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
         queryset = Product.objects.all()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = ProductSerializer(user)
+        product = get_object_or_404(queryset, pk=pk)
+        serializer = self.serializer_class(product)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def update(self, request, pk=None):
+        instance = self.queryset.get(pk=pk)
+        pdf_data = {
+            'name': instance.name,
+            'countBefore': instance.count,
+            'countAfter': request.data['count'],
+        }
+
+        serializer = self.serializer_class(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        sample_task.delay(pdf_data)
+
         return Response(serializer.data)

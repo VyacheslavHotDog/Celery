@@ -37,7 +37,6 @@ class ProductViewSet(viewsets.ViewSet):
             'countBefore': instance.count,
             'countAfter': request.data['count'],
         }
-
         serializer = self.serializer_class(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()

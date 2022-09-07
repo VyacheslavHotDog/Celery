@@ -32,7 +32,6 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 
 INSTALLED_APPS = [
     "mainapp",
-    'wkhtmltopdf',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -142,8 +141,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'v.burlakov@thecoders.ru'
 EMAIL_HOST_PASSWORD = 'Syi6_t9/L;7wGgdA'
 
-WKHTMLTOPDF_CMD = '/usr/local/lib/python3.9/site-packages/wkhtmltopdf'
 
-WKHTMLTOPDF_CMD_OPTIONS = {
-    'quiet': True,
-}

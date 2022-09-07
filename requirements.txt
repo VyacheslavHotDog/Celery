@@ -7,5 +7,5 @@ django-silk==5.0.1
 celery==5.1.2
 redis==3.5.3
 drf-yasg==1.21.3
-django-wkhtmltopdf==3.4.0
+fpdf2==2.5.6
 

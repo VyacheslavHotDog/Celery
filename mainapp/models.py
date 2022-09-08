@@ -11,3 +11,14 @@ class Product(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
+
+    def increase_count(self):
+        self.count += 1
+        self.save()
+        return self.count
+
+    def decrease_count(self):
+        if self.count > 0:
+            self.count -= 1
+            self.save()
+        return self.count

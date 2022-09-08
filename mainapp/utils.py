@@ -1,4 +1,5 @@
 from fpdf import FPDF
+from datetime import date
 
 
 class PdfGenerator:
@@ -12,6 +13,8 @@ class PdfGenerator:
         pdf.ln(10)
         pdf.cell(txt="{} : было - {}, стало - {}".format(
             pdf_data['name'], pdf_data['countBefore'], pdf_data['countAfter']))
+        pdf.ln(20)
+        pdf.cell(txt=str(date.today()))
         st = pdf.output(dest='S')
 
         return st

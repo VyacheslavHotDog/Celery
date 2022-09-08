@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from mainapp.serializers import ProductSerializer
 from pdf_django.tasks import sample_task
+from rest_framework.decorators import action
 
 
 class ProductViewSet(viewsets.ViewSet):
@@ -43,3 +44,15 @@ class ProductViewSet(viewsets.ViewSet):
         sample_task.delay(pdf_data)
 
         return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def increase_count(self, request, pk=None):
+        instance = self.queryset.get(pk=pk)
+        instance.increase_count()
+        return Response(instance.count)
+
+    @action(detail=True, methods=['post'])
+    def decrease_count(self, request, pk=None):
+        instance = self.queryset.get(pk=pk)
+        instance.decrease_count()
+        return Response(instance.count)

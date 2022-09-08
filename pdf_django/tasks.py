@@ -20,5 +20,5 @@ def sample_task(pdf_data):
         ['sl.burlakov@vk.com'],
         headers={'Reply-To':  'tihon4326@mail.ru'}
     )
-    mail.attach('test.pdf', pdf)
+    mail.attach('report.pdf', pdf)
     mail.send()

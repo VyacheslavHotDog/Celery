@@ -33,16 +33,9 @@ class ProductViewSet(viewsets.ViewSet):
 
     def update(self, request, pk=None):
         instance = self.queryset.get(pk=pk)
-        pdf_data = {
-            'name': instance.name,
-            'countBefore': instance.count,
-            'countAfter': request.data['count'],
-        }
         serializer = self.serializer_class(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        sample_task.delay(pdf_data)
-
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])

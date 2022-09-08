@@ -11,7 +11,7 @@ class ProductTestCase(TestCase):
 
     def test_product_increase(self):
         product = Product.objects.get(name="apple")
-        self.assertEqual(product.increase_count(), 45)
+        self.assertEqual(product.increase_count(), 451)
 
     def test_product_decrease(self):
         product = Product.objects.get(name="cucumber")

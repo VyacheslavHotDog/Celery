@@ -1,7 +1,9 @@
 from django.db import models
-
-# Create your models here.
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from pdf_django.tasks import sample_task
 from django.urls import reverse
+# Create your models here.
 
 
 class Product(models.Model):
@@ -22,3 +24,16 @@ class Product(models.Model):
             self.count -= 1
             self.save()
         return self.count
+
+
+@receiver(pre_save, sender=Product)
+def save_product(sender, instance, **kwargs):
+    if instance.id is not None:
+        previous = sender.objects.get(id=instance.id)
+        if previous.count != instance.count:
+            pdf_data = {
+                'name': instance.name,
+                'countBefore': previous.count,
+                'countAfter': instance.count,
+            }
+            sample_task.delay(pdf_data)

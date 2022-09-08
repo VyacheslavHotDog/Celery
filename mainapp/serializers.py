@@ -12,6 +12,8 @@ class ProductSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         """update the page number of the book and save"""
         instance.count = validated_data.get('count')
+        instance.name = validated_data.get('name')
+        instance.description = validated_data.get('description')
         instance.save()
         return instance
 

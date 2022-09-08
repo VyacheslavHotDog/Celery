@@ -3,8 +3,9 @@ from celery.utils.log import get_task_logger
 from django.core.mail import EmailMessage
 from .celery import app
 from .settings import EMAIL_HOST_USER
-logger = get_task_logger(__name__)
 from mainapp.utils import PdfGenerator
+
+logger = get_task_logger(__name__)
 
 
 @app.task(name='sample_task')

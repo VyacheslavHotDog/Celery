@@ -14,8 +14,8 @@ def sample_task(pdf_data):
 
     logger.info("Отправляю pdf.")
     mail = EmailMessage(
-        'subject',
-        'content',
+        'Склад',
+        'Изменилось количество товаров на складе',
         EMAIL_HOST_USER,
         ['sl.burlakov@vk.com'],
         headers={'Reply-To':  'tihon4326@mail.ru'}

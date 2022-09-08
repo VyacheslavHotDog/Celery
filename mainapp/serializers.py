@@ -18,3 +18,8 @@ class ProductSerializer(serializers.Serializer):
     def create(self, validated_data):
         user = Product.objects.create(**validated_data)
         return user
+
+    def validate_count(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Value must be >= 0 ")
+        return value

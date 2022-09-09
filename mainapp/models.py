@@ -25,8 +25,11 @@ class Product(models.Model):
             self.save()
         return self.count
 
+    def send_report(self, pdf_data):
+        sample_task.delay(pdf_data)
 
-@receiver(pre_save, sender=Product)
+
+@receiver(pre_save, sender=Product, dispatch_uid="product_id")
 def save_product(sender, instance, **kwargs):
     if instance.id is not None:
         previous = sender.objects.get(id=instance.id)
@@ -36,4 +39,4 @@ def save_product(sender, instance, **kwargs):
                 'countBefore': previous.count,
                 'countAfter': instance.count,
             }
-            sample_task.delay(pdf_data)
+            instance.send_report(pdf_data)
